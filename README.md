@@ -263,84 +263,84 @@ mysql > mysql -h myhost -u root -p database < sql.txt
 　　 
 　　找出年龄比小王还大的人:假设小王是28岁,先想找出年龄大于28的人   
 　　select * from users where age>(select age from users where name='xiaowang');   
-　　*****要查询的记录需要参照表里面的其他记录:   
-　　select a.name from users a,users b where b.name='xiaowang' and a.age>b.age   
+　　**要查询的记录需要参照表里面的其他记录: **    
+　　select a.name from users a,users b where b.name='xiaowang' and a.age>b.age     
 　　 
-　　表里的每个用户都想pk一下.select a.nickname,b.nickname from users a,users b where a.id>b.id ;   
+　　表里的每个用户都想pk一下.select a.nickname,b.nickname from users a,users b where a.id>b.id ;     
 　　 
 　　更保险的语句:select a.nickname,b.nickname from (select * from users order by id) a,(se 
-　　lect * from users order by id) b where a.id>b.id ;   
+　　lect * from users order by id) b where a.id>b.id ;     
 　　 
-　　再查询某个人发的所有帖子.   
-　　select b.* from articles a , articles b where a.id=2 and a.userid=b.userid   
+　　再查询某个人发的所有帖子.     
+　　select b.* from articles a , articles b where a.id=2 and a.userid=b.userid     
 　　 
-　　说明: 表之间存在着关系，ER概念的解释，用access中的示例数据库演示表之间的关系.只有innodb引擎才支持foreign key，mysql的任何引擎目前都不支持check约束。   
-　　四、字符集出现错误解决办法 
-　　出现的问题： 
-　　mysql> update users 
-　　-> set username='关羽' 
-　　-> where userid=2; 
+　　说明: 表之间存在着关系，ER概念的解释，用access中的示例数据库演示表之间的关系.只有innodb引擎才支持foreign key，mysql的任何引擎目前都不支持check约束。     
+　　## 四、字符集出现错误解决办法   
+　　出现的问题：   
+　　mysql> update users   
+　　-> set username='关羽'   
+　　-> where userid=2;   
 　　ERROR 1366 (HY000): Incorrect string value: '/xB9/xD8/xD3/xF0' for column 'usern 
-　　ame' at row 1 
-　　向表中插入中文字符时，出现错误。 
+　　ame' at row 1   
+　　向表中插入中文字符时，出现错误。   
 　　 
-　　mysql> select * from users; 
-　　+--------+----------+ 
-　　| userid | username | 
-　　+--------+----------+ 
-　　| 2 | ???? | 
-　　| 3 | ???? | 
-　　| 4 | ?í?ù | 
-　　+--------+----------+ 
-　　3 rows in set (0.00 sec) 
-　　表中的中文字符位乱码。 
-　　解决办法： 
-　　使用命令： 
-　　mysql> status; 
-　　-------------- 
-　　mysql Ver 14.12 Distrib 5.0.45, for Win32 (ia32) 
+　　mysql> select * from users;   
+　　+--------+----------+   
+　　| userid | username |   
+　　+--------+----------+   
+　　| 2 | ???? |   
+　　| 3 | ???? |   
+　　| 4 | ?í?ù |   
+　　+--------+----------+   
+　　3 rows in set (0.00 sec)   
+　　表中的中文字符位乱码。   
+　　解决办法：   
+　　使用命令：   
+　　mysql> status;   
+　　--------------   
+　　mysql Ver 14.12 Distrib 5.0.45, for Win32 (ia32)   
 　　 
-　　Connection id: 8 
-　　Current database: test 
-　　Current user: root@localhost 
-　　SSL: Not in use 
-　　Using delimiter: ; 
-　　Server version: 5.0.45-community-nt MySQL Community Edition (GPL) 
-　　Protocol version: 10 
-　　Connection: localhost via TCP/IP 
-　　Server characterset: latin1 
-　　Db characterset: latin1 
-　　Client characterset: gbk 
-　　Conn. characterset: gbk 
-　　TCP port: 3306 
-　　Uptime: 7 hours 39 min 19 sec 
-　　Threads: 2 Questions: 174 Slow queries: 0 Opens: 57 Flush tables: 1 Open ta 
-　　bles: 1 Queries per second avg: 0.006 
-　　-------------- 
-　　查看mysql发现Server characterset，Db characterset的字符集设成了latin1，所以出现中文乱码。 
+　　Connection id: 8   
+　　Current database: test   
+　　Current user: root@localhost   
+　　SSL: Not in use   
+　　Using delimiter: ;   
+　　Server version: 5.0.45-community-nt MySQL Community Edition (GPL)   
+　　Protocol version: 10   
+　　Connection: localhost via TCP/IP   
+　　Server characterset: latin1   
+　　Db characterset: latin1   
+　　Client characterset: gbk   
+　　Conn. characterset: gbk   
+　　TCP port: 3306   
+　　Uptime: 7 hours 39 min 19 sec   
+　　Threads: 2 Questions: 174 Slow queries: 0 Opens: 57 Flush tables: 1 Open ta   
+　　bles: 1 Queries per second avg: 0.006   
+　　--------------   
+　　查看mysql发现Server characterset，Db characterset的字符集设成了latin1，所以出现中文乱码。   
 　　 
-　　mysql> show tables; 
-　　+----------------+ 
-　　| Tables_in_test | 
-　　+----------------+ 
-　　| users | 
-　　+----------------+ 
-　　1 row in set (0.00 sec) 
+　　mysql> show tables;   
+　　+----------------+   
+　　| Tables_in_test |   
+　　+----------------+   
+　　| users |   
+　　+----------------+   
+　　1 row in set (0.00 sec)   
 　　 
-　　更改表的字符集。 
-　　mysql> alter table users character set GBK; 
-　　Query OK, 3 rows affected (0.08 sec) 
-　　Records: 3 Duplicates: 0 Warnings: 0 
+　　更改表的字符集。  
+　　mysql> alter table users character set GBK;   
+　　Query OK, 3 rows affected (0.08 sec)   
+　　Records: 3 Duplicates: 0 Warnings: 0   
 　　 
-　　查看表的结构： 
-　　mysql> show create users; 
-　　ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
-　　corresponds to your MySQL server version for the right syntax to use near 'users 
-　　' at line 1 
-　　mysql> show create table users; 
-　　+-------+----------------------------------------------------------------------- 
-　　------------------------------------------------------------------------------+ 
-　　| Table | Create Table 
+　　查看表的结构：   
+　　mysql> show create users;   
+　　ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that   
+　　corresponds to your MySQL server version for the right syntax to use near 'users   
+　　' at line 1   
+　　mysql> show create table users;   
+　　+-------+-----------------------------------------------------------------------   
+　　------------------------------------------------------------------------------+   
+　　| Table | Create Table   
 　　| 
 　　+-------+----------------------------------------------------------------------- 
 　　------------------------------------------------------------------------------+ 
@@ -350,94 +350,94 @@ mysql > mysql -h myhost -u root -p database < sql.txt
 　　) ENGINE=InnoDB DEFAULT CHARSET=gbk | 
 　　+-------+----------------------------------------------------------------------- 
 　　------------------------------------------------------------------------------+ 
-　　1 row in set (0.00 sec) 
+　　1 row in set (0.00 sec)   
 　　 
-　　mysql> desc users; 
+　　mysql> desc users;   
+　　+----------+----------+------+-----+---------+-------+   
+　　| Field | Type | Null | Key | Default | Extra |   
+　　+----------+----------+------+-----+---------+-------+   
+　　| userid | int(11) | YES | | NULL | |   
+　　| username | char(20) | YES | | NULL | |   
 　　+----------+----------+------+-----+---------+-------+ 
-　　| Field | Type | Null | Key | Default | Extra | 
-　　+----------+----------+------+-----+---------+-------+ 
-　　| userid | int(11) | YES | | NULL | | 
-　　| username | char(20) | YES | | NULL | | 
-　　+----------+----------+------+-----+---------+-------+ 
-　　2 rows in set (0.02 sec) 
+　　2 rows in set (0.02 sec)     
 　　 
-　　这时向表中插入中文然后有错误。 
-　　mysql> insert into users values(88,'中文'); 
+　　这时向表中插入中文然后有错误。   
+　　mysql> insert into users values(88,'中文');   
 　　ERROR 1366 (HY000): Incorrect string value: '/xD6/xD0/xCE/xC4' for column 'usern 
-　　ame' at row 1 
-　　mysql> insert into users values(88,'中文'); 
+　　ame' at row 1   
+　　mysql> insert into users values(88,'中文');   
 　　ERROR 1366 (HY000): Incorrect string value: '/xD6/xD0/xCE/xC4' for column 'usern 
-　　ame' at row 1 
+　　ame' at row 1   
 　　 
-　　还要更改users表的username的字符集。 
-　　mysql> alter table users modify username char(20) character set gbk; 
+　　还要更改users表的username的字符集。   
+　　mysql> alter table users modify username char(20) character set gbk;   
 　　ERROR 1366 (HY000): Incorrect string value: '/xC0/xEE/xCB/xC4' for column 'usern 
-　　ame' at row 1 
-　　mysql> alter table users modify username char(20) character set gbk; 
+　　ame' at row 1   
+　　mysql> alter table users modify username char(20) character set gbk;   
 　　ERROR 1366 (HY000): Incorrect string value: '/xC0/xEE/xCB/xC4' for column 'usern 
-　　ame' at row 1 
+　　ame' at row 1   
 　　 
-　　因为表中已经有数据，所以更改username字符集的操作没有成*** 
-　　清空users表中的数据 
-　　mysql> truncate table users; 
-　　Query OK, 3 rows affected (0.01 sec) 
+　　因为表中已经有数据，所以更改username字符集的操作没有成***   
+　　清空users表中的数据   
+　　mysql> truncate table users;  
+　　Query OK, 3 rows affected (0.01 sec)   
 　　 
-　　从新更改user表中username的字符集 
-　　mysql> alter table users modify username char(20) character set gbk; 
-　　Query OK, 0 rows affected (0.06 sec) 
-　　Records: 0 Duplicates: 0 Warnings: 0 
+　　从新更改user表中username的字符集   
+　　mysql> alter table users modify username char(20) character set gbk;   
+　　Query OK, 0 rows affected (0.06 sec)   
+　　Records: 0 Duplicates: 0 Warnings: 0   
 　　 
-　　这时再插入中文字符，插入成***。 
-　　mysql> insert into users values(88,'中文'); 
-　　Query OK, 1 row affected (0.01 sec) 
+　　这时再插入中文字符，插入成***。   
+　　mysql> insert into users values(88,'中文');   
+　　Query OK, 1 row affected (0.01 sec)   
 　　 
-　　mysql> select * from users; 
-　　+--------+----------+ 
-　　| userid | username | 
-　　+--------+----------+ 
-　　| 88 | 中文 | 
-　　+--------+----------+ 
-　　1 row in set (0.00 sec) 
-　　mysql>
+　　mysql> select * from users;   
+　　+--------+----------+    
+　　| userid | username |   
+　　+--------+----------+   
+　　| 88 | 中文 |   
+　　+--------+----------+   
+　　1 row in set (0.00 sec)   
+　　mysql>  
 
-转载声明：本文转自http://hi.baidu.com/zhjlabm/blog/item/b939fc3307a1d445ad4b5fbd.html
+转载声明：本文转自http://hi.baidu.com/zhjlabm/blog/item/b939fc3307a1d445ad4b5fbd.html  
 
-================================================================================
-
- 
-
-学习MySQL常用操作命令
+================================================================================  
 
  
 
-1、启动MySQL服务器
-
-实际上上篇已讲到如何启动MySQL。两种方法： 一是用winmysqladmin，如果机器启动时已自动运行，则可直接进入下一步操作。 二是在DOS方式下运行 d:mysqlbinmysqld
+# 学习MySQL常用操作命令  
 
  
 
-2、进入mysql交互操作界面
+## 1、启动MySQL服务器
 
-在DOS方式下，运行： d:mysqlbinmysql
-
-出现: mysql 的提示符，此时已进入mysql的交互操作方式。
-
-如果出现 "ERROR 2003: Can′t connect to MySQL server on ′localhost′ (10061)“，
-
-说明你的MySQL还没有启动。
+实际上上篇已讲到如何启动MySQL。两种方法： 一是用winmysqladmin，如果机器启动时已自动运行，则可直接进入下一步操作。 二是在DOS方式下运行 d:mysqlbinmysqld  
 
  
 
-3、退出MySQL操作界面
+## 2、进入mysql交互操作界面  
 
-在mysql>提示符下输入quit可以随时退出交互操作界面： 
-mysql> quit 
-Bye 
-你也可以用control-D退出。
+在DOS方式下，运行： d:mysqlbinmysql  
+
+出现: mysql 的提示符，此时已进入mysql的交互操作方式。  
+
+如果出现 "ERROR 2003: Can′t connect to MySQL server on ′localhost′ (10061)“，  
+
+说明你的MySQL还没有启动。  
 
  
 
-4、第一条命令
+## 3、退出MySQL操作界面
+ 
+在mysql>提示符下输入quit可以随时退出交互操作界面：   
+mysql> quit   
+Bye   
+你也可以用control-D退出。  
+
+ 
+
+## 4、第一条命令  
 
 mysql> select version(),current_date(); 
 +----------------+-----------------+ 
@@ -446,21 +446,21 @@ mysql> select version(),current_date();
 | 3.23.25a-debug | 2001-05-17 | 
 +----------------+-----------------+ 
 1 row in set (0.01 sec) 
-mysql>
+mysql>  
 
 
-此命令要求mysql服务器告诉你它的版本号和当前日期。尝试用不同大小写操作上述命令，看结果如何。结果说明mysql命令的大小写结果是一致的。
+此命令要求mysql服务器告诉你它的版本号和当前日期。尝试用不同大小写操作上述命令，看结果如何。结果说明mysql命令的大小写结果是一致的。  
 
-练习如下操作：
+练习如下操作：  
 
-mysql>Select (20+5)*4; 
-mysql>Select (20+5)*4,sin(pi()/3); 
-mysql>Select (20+5)*4 AS Result,sin(pi()/3); (AS: 指定假名为Result) 
+mysql>Select (20+5)*4;   
+mysql>Select (20+5)*4,sin(pi()/3);   
+mysql>Select (20+5)*4 AS Result,sin(pi()/3); (AS: 指定假名为Result)   
 
  
 
-5、多行语句
-    一条命令可以分成多行输入，直到出现分号“；”为止： 
+5、多行语句  
+    一条命令可以分成多行输入，直到出现分号“；”为止：   
 <ccid_nobr>
 <table width="400" border="1" cellspacing="0" cellpadding="2" 
 bordercolorlight = "black" bordercolordark = "#FFFFFF" align="center">
@@ -476,19 +476,19 @@ bordercolorlight = "black" bordercolordark = "#FFFFFF" align="center">
 +--------------------+---------------------+ 
 | ODBC@localhost | 2001-05-17 22:59:15 | 
 +--------------------+---------------------+ 
-1 row in set (0.06 sec) 
-mysql>
+1 row in set (0.06 sec)   
+mysql>  
 
 
-注意中间的逗号和最后的分号的使用方法。
+注意中间的逗号和最后的分号的使用方法。  
 
  
 
-6、一行多命令
+6、一行多命令    
 
-输入如下命令：
+输入如下命令：  
 
-mysql> SELECT USER(); SELECT NOW(); 
+mysql> SELECT USER(); SELECT NOW();   
 +------------------+ 
 | USER() | 
 +------------------+ 
@@ -502,16 +502,16 @@ mysql> SELECT USER(); SELECT NOW();
 | 2001-05-17 23:06:15 | 
 +---------------------+ 
 1 row in set (0.00 sec) 
-mysql>
+mysql>  
 
 
-注意中间的分号，命令之间用分号隔开。
+注意中间的分号，命令之间用分号隔开。  
 
  
 
-7、显示当前存在的数据库
+## 7、显示当前存在的数据库
 
-mysql> show databases; 
+mysql> show databases;   
 +----------+ 
 | Database | 
 +----------+ 
@@ -519,43 +519,43 @@ mysql> show databases;
 | test | 
 +----------+ 
 2 row in set (0.06 sec) 
-mysql>
+mysql>  
 
 
-8、选择数据库并显示当前选择的数据库
+## 8、选择数据库并显示当前选择的数据库  
 
-mysql> USE mysql 
-Database changed 
-mysql> 
-(USE 和 QUIT 命令不需要分号结束。） 
-mysql> select database(); 
-+---------------+ 
+mysql> USE mysql   
+Database changed   
+mysql>   
+(USE 和 QUIT 命令不需要分号结束。）   
+mysql> select database();   
++---------------+  
 | database() | 
 +---------------+ 
 | mysql | 
 +---------------+ 
-1 row in set (0.00 sec)
+1 row in set (0.00 sec)  
 
-9、显示当前数据库中存在的表 
-mysql> SHOW TABLES;
-
- 
-
-10、显示表(db)的内容 
-mysql>select * from db;
+## 9、显示当前数据库中存在的表   
+mysql> SHOW TABLES;  
 
  
 
-11、命令的取消
+## 10、显示表(db)的内容   
+mysql>select * from db;  
 
-当命令输入错误而又无法改变（多行语句情形）时，只要在分号出现前就可以用 c来取消该条命令
+ 
 
-mysql> select 
+## 11、命令的取消  
+
+当命令输入错误而又无法改变（多行语句情形）时，只要在分号出现前就可以用 c来取消该条命令  
+
+mysql> select   
 -> user() 
 -> c 
-mysql>
+mysql>  
 
-这是一些最常用的最基本的操作命令，通过多次练习就可以牢牢掌捂了
+这是一些最常用的最基本的操作命令，通过多次练习就可以牢牢掌捂了  
 
  
 
@@ -563,28 +563,28 @@ mysql>
 
  
 
-mysql命令
+# mysql命令  
 
  
 
-测试环境：mysql 5.0.45
-【注：可以在mysql中通过mysql> SELECT VERSION();来查看数据库版本】
-整理：leo
+测试环境：mysql 5.0.45  
+【注：可以在mysql中通过mysql> SELECT VERSION();来查看数据库版本】  
+整理：leo  
 
 
-一、连接MYSQL。
-格式： mysql -h主机地址 -u用户名 －p用户密码
+## 一、连接MYSQL。  
+格式： mysql -h主机地址 -u用户名 －p用户密码  
 
 
-1、连接到本机上的MYSQL。
-首先打开DOS窗口，然后进入目录mysql/bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，但是密码前必须没有空格，否则让你重新输入密码.
+## 1、连接到本机上的MYSQL。
+首先打开DOS窗口，然后进入目录mysql/bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，但是密码前必须没有空格，否则让你重新输入密码.  
 如果刚安装好MYSQL，超级用户root是没有密码的，故直接回车即可进入到MYSQL中了，MYSQL的提示符是： mysql>
-2、连接到远程主机上的MYSQL。假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：
-mysql -h110.110.110.110 -u root -p 123; （注:u与root之间可以不用加空格，其它也一样）
-3、退出MYSQL命令： exit （回车）
+## 2、连接到远程主机上的MYSQL。假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：  
+mysql -h110.110.110.110 -u root -p 123; （注:u与root之间可以不用加空格，其它也一样）  
+## 3、退出MYSQL命令： exit （回车）  
 
 
-二、修改密码。
+## 二、修改密码。
 格式：mysqladmin -u用户名 -p旧密码 password 新密码
 1、给root加个密码ab12。首先在DOS下进入目录mysql/bin，然后键入以下命令
 mysqladmin -u root -password ab12
@@ -592,7 +592,7 @@ mysqladmin -u root -password ab12
 2、再将root的密码改为djg345。
 mysqladmin -u root -p ab12 password djg345
 
-三、增加新用户。
+## 三、增加新用户。
 （注意：和上面不同，下面的因为是MYSQL环境中的命令，所以后面都带一个分号作为命令结束符）
 格式：grant select on 数据库.* to 用户名@登录主机 identified by “密码”
 1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：
