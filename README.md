@@ -607,12 +607,12 @@ grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@loca
 grant select,insert,update,delete on mydb.* to [email=test2@localhost]test2@localhost[/email] identified by “”;
 下篇我是MYSQL中有关数据库方面的操作。注意：你必须首先登录到MYSQL中，以下操作都是在MYSQL的提示符下进行的，而且每个命令以分号结束。
 
-一、操作技巧
+## 一、操作技巧
 1、如果你打命令时，回车后发现忘记加分号，你无须重打一遍命令，只要打个分号回车就可以了。
 也就是说你可以把一个完整的命令分成几行来打，完后用分号作结束标志就OK。
 2、你可以使用光标上下键调出以前的命令。
 
-二、显示命令
+## 二、显示命令
 1、显示当前数据库服务器中的数据库列表：
 mysql> SHOW DATABASES;
 注意：mysql库里面有MYSQL的系统信息，我们改密码和新增用户，实际上就是用这个库进行操作。
@@ -681,7 +681,7 @@ mysql> SELECT DATABASE();
 16、显示当前的user：
 mysql> SELECT USER();
 
-三、一个建库和建表以及插入数据的实例
+## 三、一个建库和建表以及插入数据的实例
 drop database if exists school; //如果存在SCHOOL则删除
 create database school;           //建立库SCHOOL
 use school;   //打开库SCHOOL
@@ -704,7 +704,7 @@ mysql -uroot -p密码 < c://school.sql
 如果成功，空出一行无任何显示；如有错误，会有提示。（以上命令已经调试，你只要将//的注释去掉即可使用）。
 （2）或者进入命令行后使用 mysql> source c://school.sql; 也可以将school.sql文件导入数据库中。
 
-四、将文本数据转到数据库中
+## 四、将文本数据转到数据库中
 1、文本数据应符合的格式：字段数据之间用tab键隔开，null值用[url=file:////n]//n[/url]来代替.例：
 3 rose 大连二中 1976-10-10
 4 mike 大连一中 1975-12-23
@@ -712,7 +712,7 @@ mysql -uroot -p密码 < c://school.sql
 2、数据传入命令 load data local infile “c://school.txt” into table 表名;
 注意：你最好将文件复制到[url=file:////mysql//bin]//mysql//bin[/url]目录下，并且要先用use命令打表所在的库。
 
-五、备份数据库
+## 五、备份数据库
 1.导出整个数据库
 导出文件默认是存在mysql/bin目录下
 mysqldump -u 用户名 -p 数据库名 > 导出的文件名
@@ -729,7 +729,7 @@ mysqldump -u user_name -p -d –add-drop-table database_name > outfile_name.sql
 4.带语言参数导出
 mysqldump -uroot -p –default-character-set=latin1 –set-charset=gbk –skip-opt database_name > outfile_name.sql
 
-六、导入数据库
+## 六、导入数据库
 
 例如：数据库名为 dbTest
 
