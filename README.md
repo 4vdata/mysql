@@ -96,7 +96,8 @@ shell> mysqladmin -u root -p -t databasename > a.sql
 
 　　 mysqldump -T./ phptest driver
 
-其中，只有指定了-T参数才可以卸出纯文本文件，表示卸出数据的目录，./表示当前目录，即与mysqldump同一目录。如果不指定driver 表，则将卸出整个数据库的数据。每个表会生成两个文件，一个为.sql文件，包含建表执行。另一个为.txt文件，只包含数据，且没有sql指令。
+其中，只有指定了-T参数才可以卸出纯文本文件，表示卸出数据的目录，./表示当前目录，即与mysqldump同一目录。如果不指定driver 表，
+则将卸出整个数据库的数据。每个表会生成两个文件，一个为.sql文件，包含建表执行。另一个为.txt文件，只包含数据，且没有sql指令。
 
  
 
@@ -412,7 +413,8 @@ mysql > mysql -h myhost -u root -p database < sql.txt
 
 ## 1、启动MySQL服务器
 
-实际上上篇已讲到如何启动MySQL。两种方法： 一是用winmysqladmin，如果机器启动时已自动运行，则可直接进入下一步操作。 二是在DOS方式下运行 d:mysqlbinmysqld  
+实际上上篇已讲到如何启动MySQL。两种方法： 一是用winmysqladmin，如果机器启动时已自动运行，则可直接进入下一步操作。
+二是在DOS方式下运行 d:mysqlbinmysqld  
 
  
 
@@ -577,7 +579,8 @@ mysql>
 
 
 ## 1、连接到本机上的MYSQL。
-首先打开DOS窗口，然后进入目录mysql/bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，但是密码前必须没有空格，否则让你重新输入密码.  
+首先打开DOS窗口，然后进入目录mysql/bin，再键入命令mysql -u root -p，回车后提示你输密码.注意用户名前可以有空格也可以没有空格，  
+但是密码前必须没有空格，否则让你重新输入密码.  
 如果刚安装好MYSQL，超级用户root是没有密码的，故直接回车即可进入到MYSQL中了，MYSQL的提示符是： mysql>
 ## 2、连接到远程主机上的MYSQL。假设远程主机的IP为：110.110.110.110，用户名为root,密码为abcd123。则键入以下命令：  
 mysql -h110.110.110.110 -u root -p 123; （注:u与root之间可以不用加空格，其它也一样）  
@@ -595,7 +598,8 @@ mysqladmin -u root -p ab12 password djg345
 ## 三、增加新用户。
 （注意：和上面不同，下面的因为是MYSQL环境中的命令，所以后面都带一个分号作为命令结束符）
 格式：grant select on 数据库.* to 用户名@登录主机 identified by “密码”
-1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。首先用root用户连入MYSQL，然后键入以下命令：
+1、增加一个用户test1密码为abc，让他可以在任何主机上登录，并对所有数据库有查询、插入、修改、删除的权限。  
+首先用root用户连入MYSQL，然后键入以下命令：
 grant select,insert,update,delete on *.* to [email=test1@”%]test1@”%[/email]” Identified by “abc”;
 但增加的用户是十分危险的，你想如某个人知道test1的密码，那么他就可以在internet上的任何一台电脑上登录你的mysql数据库并对你的数据可以为所欲为了，解决办法见2。
 
